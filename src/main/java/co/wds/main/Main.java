@@ -26,6 +26,6 @@ public class Main extends Application<MyConfiguration> {
     @Override
     public void run(MyConfiguration configuration, Environment environment) throws Exception {
         JerseyEnvironment jerseyEnvironment = environment.jersey();
-        jerseyEnvironment.register(new DeviceResource(new DeviceService("savedDevices.json")));
+        jerseyEnvironment.register(new DeviceResource(new DeviceService()));
     }
 }

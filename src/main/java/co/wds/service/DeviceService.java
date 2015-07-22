@@ -1,28 +1,39 @@
 package co.wds.service;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import co.wds.model.Device;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DeviceService {
+    private Set<Device> devices;
+    private ObjectMapper mapper;
 
-
-    private final String fileName;
-
-    public DeviceService(String devicesFileName) {
-        this.fileName = devicesFileName;
+    public DeviceService() {
+        this.devices = new HashSet<>();
+        this.mapper = new ObjectMapper();
     }
 
     public void saveDevices(InputStream inputStream) throws IOException {
-        Path path = Paths.get(fileName);
-
-        Files.copy(inputStream,path, StandardCopyOption.REPLACE_EXISTING);
+        devices = mapper.readValue(inputStream, mapper.getTypeFactory().constructCollectionType(Set.class, Device
+                .class));
     }
 
-    public FileInputStream getDevices() throws FileNotFoundException {
-        File file = new File(fileName);
-        return new FileInputStream(file);
+    public Set<Device> getDevices() {
+        return devices;
+    }
+
+    public Set<Device> getDevices(String name) {
+        Set<Device> filteredDevices = new HashSet<>();
+        for(Device device : devices){
+            if(device.getName().equalsIgnoreCase(name)){
+                filteredDevices.add(device);
+            }
+        }
+        return filteredDevices;
     }
 }

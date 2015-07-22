@@ -1,0 +1,70 @@
+[
+    {
+        "brand": "Mockia",
+        "model": "5800",
+        "formFactor": "CANDR",
+        "attributes": [
+            {
+                "name": "Screen Size",
+                "value": "128mm"
+            }
+        ]
+    },
+    {
+        "brand": "Mockia",
+        "model": "5801",
+        "formFactor": "CANDYBAR",
+        "attributes": [
+            {
+                "name": "Screen Size",
+                "value": "128mm"
+            }
+        ]
+    },
+    {
+        "brand": "Mockia",
+        "model": "X11",
+        "formFactor": "CANDYBAR",
+        "attributes": [
+            {
+                "name": "Screen Size",
+                "value": "128mm"
+            }
+        ]
+    },
+
+    {
+        "brand": "PhonyPhonyPhonyPhonyPhonyPhonyPhonyPhonyPhonyPhony",
+        "model": "X11",
+        "formFactor": "SMARTPHONE",
+        "attributes": [
+            {
+                "name": "Bluetooth",
+                "value": "0.1"
+            },
+            {
+                "name": "Raspberry",
+                "value": "Pi"
+            }
+        ]
+    },
+    {
+        "brand": "Samwrong",
+        "model": "X11",
+        "formFactor": "PHABLET",
+        "attributes": [
+            {
+                "name": "Frequencies",
+                "value": "GSM,LTE,Kenneth"
+            },
+            {
+                "name": "Memory",
+                "value": "333Mb"
+            },
+            {
+                "name": "Teasmaid",
+                "value": "true"
+            }
+        ]
+    }
+]

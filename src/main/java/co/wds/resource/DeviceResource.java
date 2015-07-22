@@ -25,9 +25,12 @@ public class DeviceResource {
 
     @GET
     @Produces("application/json")
-    public Response getDevices() throws FileNotFoundException {
+    public Response getDevices(@QueryParam("name")String name) throws FileNotFoundException {
         try{
-            return Response.ok(deviceService.getDevices()).build();
+            if(name == null) {
+                return Response.ok(deviceService.getDevices()).build();
+            }
+            return Response.ok(deviceService.getDevices(name)).build();
         }catch(Exception exception){
             logger.error(exception.getMessage(), exception);
             return Response.serverError().entity("No devices were found, or none could be retrieved").build();

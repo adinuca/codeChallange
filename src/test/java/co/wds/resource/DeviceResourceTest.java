@@ -1,5 +1,6 @@
 package co.wds.resource;
 
+import co.wds.model.Device;
 import co.wds.service.DeviceService;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
@@ -12,14 +13,12 @@ import javax.ws.rs.core.Response;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Collections;
+import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DeviceResourceTest {
@@ -50,23 +49,27 @@ public class DeviceResourceTest {
     }
 
     @Test
-    public void shouldReturnDevices() throws FileNotFoundException {
-        when(deviceService.getDevices()).thenReturn( inputStream);
+    public void shouldReturnEmptyListOfDevicesWhenNoneWasUploaded() throws FileNotFoundException {
+        Set<Device> devices = Collections.emptySet();
+        when(deviceService.getDevices()).thenReturn(devices);
 
-        Response response = uploadFileResource.getDevices();
+        Response response = uploadFileResource.getDevices(null);
 
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        assertThat(response.getEntity(), CoreMatchers.<Object>is(inputStream));
+        assertThat(response.getEntity(), CoreMatchers.<Object>is(devices));
         verify(deviceService).getDevices();
     }
 
     @Test
-    public void shouldReturnServerErrorIfNoDevicesFound() throws FileNotFoundException {
-        when(deviceService.getDevices()).thenThrow(FileNotFoundException.class);
+    public void shouldReturnFilteredResultsOfDevicesWhenNameIsGiven() throws FileNotFoundException {
+        Set<Device> devices = Collections.emptySet();
+        String name = "something something";
+        when(deviceService.getDevices(name)).thenReturn(devices);
 
-        Response response = uploadFileResource.getDevices();
+        Response response = uploadFileResource.getDevices(name);
 
-        assertThat(response.getStatus(), is(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()));
-        verify(deviceService).getDevices();
+        assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
+        assertThat(response.getEntity(), CoreMatchers.<Object>is(devices));
+        verify(deviceService).getDevices(name);
     }
 }

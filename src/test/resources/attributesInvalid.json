@@ -1,0 +1,12 @@
+[
+    {
+        "brand": "Phony",
+        "model": "X11",
+        "formFactor": "SMARTPHONE",
+        "attributes": [
+            {
+                "name": "Bluetooth"
+            }
+        ]
+    }
+]
