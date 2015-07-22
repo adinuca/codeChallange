@@ -53,7 +53,7 @@ public class DeviceResourceTest {
         Set<Device> devices = Collections.emptySet();
         when(deviceService.getDevices()).thenReturn(devices);
 
-        Response response = uploadFileResource.getDevices(null);
+        Response response = uploadFileResource.getDevices(null, null, null);
 
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         assertThat(response.getEntity(), CoreMatchers.<Object>is(devices));
@@ -66,7 +66,7 @@ public class DeviceResourceTest {
         String name = "something something";
         when(deviceService.getDevices(name)).thenReturn(devices);
 
-        Response response = uploadFileResource.getDevices(name);
+        Response response = uploadFileResource.getDevices(name, null, null);
 
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         assertThat(response.getEntity(), CoreMatchers.<Object>is(devices));
@@ -80,7 +80,7 @@ public class DeviceResourceTest {
         String model = "model";
         when(deviceService.getDevices(brand, model)).thenReturn(devices);
 
-        Response response = uploadFileResource.getDevices(brand, model);
+        Response response = uploadFileResource.getDevices(null, brand, model);
 
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         assertThat(response.getEntity(), CoreMatchers.<Object>is(devices));

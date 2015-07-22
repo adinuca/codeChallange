@@ -25,12 +25,15 @@ public class DeviceResource {
     }
 
     @GET
-    public Response getDevices(@QueryParam("name") String name) throws FileNotFoundException {
+    public Response getDevices(@QueryParam("name") String name, @QueryParam("brand") String brand, @QueryParam("model") String model) throws FileNotFoundException {
         try {
-            if (name == null) {
-                return Response.ok(deviceService.getDevices()).build();
+            if (name != null ) {
+                return Response.ok(deviceService.getDevices(name)).build();
             }
-            return Response.ok(deviceService.getDevices(name)).build();
+            if (brand != null || model != null) {
+                return Response.ok(deviceService.getDevices(brand, model)).build();
+            }
+            return Response.ok(deviceService.getDevices()).build();
         } catch (Exception exception) {
             logger.error(exception.getMessage(), exception);
             return Response.serverError().entity("No devices were found, or none could be retrieved").build();
@@ -47,16 +50,5 @@ public class DeviceResource {
             return Response.serverError().build();
         }
         return Response.ok("Devices were saved successfully").build();
-    }
-
-    @GET
-    public Response getDevices(@QueryParam("brand") String brand, @QueryParam("model") String model) {
-        try {
-            return Response.ok(deviceService.getDevices(brand, model)).build();
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return Response.serverError().build();
-        }
-
     }
 }
