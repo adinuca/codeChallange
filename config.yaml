@@ -1,0 +1,52 @@
+server:
+#  softNofileLimit: 1000
+#  hardNofileLimit: 1000
+  requestLog:
+    appenders:
+      - type: file
+        currentLogFilename: codeChallangeRequests.log
+        threshold: ALL
+        archive: true
+        archivedLogFilenamePattern: codeChallangeRequests-%d.log
+        archivedFileCount: 5
+        timeZone: UTC
+  applicationConnectors:
+    - type: http
+      port: 8080
+#    - type: https
+#      port: 8443
+#      keyStorePath: example.keystore
+#      keyStorePassword: example
+#      validateCerts: false
+# this requires the alpn-boot library on the JVM's boot classpath
+#    - type: spdy3
+#      port: 8445
+#      keyStorePath: example.keystore
+#      keyStorePassword: example
+#      validateCerts: false
+  adminConnectors:
+    - type: http
+      port: 8081
+ #   - type: https
+ #     port: 8444
+ #     keyStorePath: example.keystore
+ #     keyStorePassword: example
+ #     validateCerts: false
+
+
+# Logging settings.
+logging:
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: DEBUG
+  # Logger-specific levels.
+  loggers:
+    org.hibernate.SQL: ALL
+
+  appenders:
+    - type: file
+      currentLogFilename: codeChallange.log
+      threshold: INFO
+      archive: true
+      archivedLogFilenamePattern: codeChallange-%d.log
+      archivedFileCount: 5
+      timeZone: UTC
