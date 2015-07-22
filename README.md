@@ -80,6 +80,20 @@ Acceptance Criteria:
 ---
 
 Question: What would you do to improve things if you had more time?
+- fix the concurency issue
+- rename the methods in Validator - to isValid
+- test more manually
+
+---
+To run the application:
+mvn clean install
+java -jar target\codeChallange-0.0.1-SNAPSHOT.jar server config.yaml
+
+endpoints:
+GET /devices
+POST /devices
+Get /devices?name=""
+Get /devices?brand=""&model=""
 
 If you have any questions then you can email dev@wds.co for help.
 

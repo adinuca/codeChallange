@@ -21,51 +21,49 @@ public class DevicesDeserializer extends JsonDeserializer<Device> {
     @Override
     public Device deserialize(JsonParser jp, DeserializationContext ctxt)
             throws IOException {
-        try {
-            JsonNode node = jp.readValueAsTree();
-            String brand = node.findValue("brand").asText();
-            String model = node.findValue("model").asText();
-            String formFactor = String.valueOf(node.findValue("formFactor").asText());
-            List<Attribute> attributeList = getListOfAttributes(node.findValue("attributes"));
-            if (isDeviceFieldValid(brand) && isDeviceFieldValid(model) && attributeList != null) {
-                return new Device(brand, model, formFactor, attributeList);
-            }
-            logger.error("Device with brand {} and model {} is not valid.", brand, model);
-            throw new IOException("File did not contain valid devices");
-        } catch (NullPointerException | IllegalArgumentException e) {
-            throw new IOException("File did not contain valid devices");
-        }
+        JsonNode node = jp.readValueAsTree();
+        String brand = getBrand(node);
+        String model = getModel(node);
+        String formFactor =getFormFactor(node);
+        List<Attribute> attributeList = getListOfAttributes(node.findValue("attributes"));
+        return new Device(brand, model, formFactor, attributeList);
     }
 
-    private boolean isDeviceFieldValid(String field) {
-        return !(field == null || field.isEmpty() || field.length() > 50);
+    private String getFormFactor(JsonNode node) {
+        return getString(node, "formFactor");
     }
+
+    public String getModel(JsonNode node) {
+        return getString(node, "model");
+    }
+
+    public String getBrand(JsonNode node) {
+        return getString(node, "brand");
+    }
+
+    public String getString(JsonNode node, String name) {
+        try {
+            return node.findValue(name).asText();
+        } catch (Exception e) {
+            logger.error(name + " could not pe deserialized");
+        }
+        return null;
+    }
+
 
     private List<Attribute> getListOfAttributes(JsonNode node) {
         List<Attribute> attributes = new ArrayList<>();
-        Iterator<JsonNode> iterator = node.elements();
-        while (iterator.hasNext()) {
-            JsonNode attribute = iterator.next();
-            String name = attribute.findValue("name").asText();
-            String value = attribute.findValue("value").asText();
-            if (name != null && !name.isEmpty() && value != null && !value.isEmpty()) {
-                if (isAttributeNameValid(name) && isAttributeValueValid(value)) {
-                    attributes.add(new Attribute(name, value));
-                } else {
-                    return null;
-                }
-            } else if ((name == null || name.isEmpty()) && !(value == null || value.isEmpty())) {
-                return null;
+        if(node != null) {
+            Iterator<JsonNode> iterator = node.elements();
+            while (iterator.hasNext()) {
+                JsonNode attribute = iterator.next();
+                String name = getString(attribute, "name");
+                String value = getString(attribute, "value");
+
+                attributes.add(new Attribute(name, value));
             }
         }
         return attributes;
     }
 
-    private boolean isAttributeValueValid(String value) {
-        return value.length() <= 100;
-    }
-
-    private boolean isAttributeNameValid(String name) {
-        return name.length() <= 20;
-    }
 }

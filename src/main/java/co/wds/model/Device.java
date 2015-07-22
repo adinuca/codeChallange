@@ -48,4 +48,28 @@ public class Device {
                 ", attributes=" + attributes +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (brand == null || model == null) {
+            return false;
+        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Device device = (Device) o;
+
+        if (!brand.equalsIgnoreCase(device.brand)) return false;
+        return model.equalsIgnoreCase(device.model);
+    }
+
+    @Override
+    public int hashCode() {
+        if(brand !=null && model!=null) {
+            int result = brand.hashCode();
+            result = 31 * result + model.hashCode();
+            return result;
+        }
+        return 31;
+    }
 }

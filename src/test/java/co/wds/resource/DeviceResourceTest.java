@@ -72,4 +72,18 @@ public class DeviceResourceTest {
         assertThat(response.getEntity(), CoreMatchers.<Object>is(devices));
         verify(deviceService).getDevices(name);
     }
+
+    @Test
+    public void shouldReturnFilteredResultsOfDevicesWhenModelAndBrandIsGiven() throws FileNotFoundException {
+        Set<Device> devices = Collections.emptySet();
+        String brand = "something";
+        String model = "model";
+        when(deviceService.getDevices(brand, model)).thenReturn(devices);
+
+        Response response = uploadFileResource.getDevices(brand, model);
+
+        assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
+        assertThat(response.getEntity(), CoreMatchers.<Object>is(devices));
+        verify(deviceService).getDevices(brand, model);
+    }
 }

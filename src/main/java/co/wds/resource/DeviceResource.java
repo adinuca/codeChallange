@@ -14,6 +14,7 @@ import java.io.InputStream;
 
 
 @Path("/devices")
+@Produces("application/json")
 public class DeviceResource {
 
     private final DeviceService deviceService;
@@ -24,14 +25,13 @@ public class DeviceResource {
     }
 
     @GET
-    @Produces("application/json")
-    public Response getDevices(@QueryParam("name")String name) throws FileNotFoundException {
-        try{
-            if(name == null) {
+    public Response getDevices(@QueryParam("name") String name) throws FileNotFoundException {
+        try {
+            if (name == null) {
                 return Response.ok(deviceService.getDevices()).build();
             }
             return Response.ok(deviceService.getDevices(name)).build();
-        }catch(Exception exception){
+        } catch (Exception exception) {
             logger.error(exception.getMessage(), exception);
             return Response.serverError().entity("No devices were found, or none could be retrieved").build();
         }
@@ -39,7 +39,7 @@ public class DeviceResource {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadDevices(@FormDataParam("devices") InputStream devicesFile){
+    public Response uploadDevices(@FormDataParam("devices") InputStream devicesFile) {
         try {
             deviceService.saveDevices(devicesFile);
         } catch (IOException e) {
@@ -47,5 +47,16 @@ public class DeviceResource {
             return Response.serverError().build();
         }
         return Response.ok("Devices were saved successfully").build();
+    }
+
+    @GET
+    public Response getDevices(@QueryParam("brand") String brand, @QueryParam("model") String model) {
+        try {
+            return Response.ok(deviceService.getDevices(brand, model)).build();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Response.serverError().build();
+        }
+
     }
 }

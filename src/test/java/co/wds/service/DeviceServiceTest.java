@@ -14,6 +14,7 @@ import java.util.Set;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(BlockJUnit4ClassRunner.class)
@@ -64,6 +65,30 @@ public class DeviceServiceTest {
         Device device = (Device) result.toArray()[0];
         assertThat(device.getBrand(), is(equalTo(brand)));
         assertThat(device.getModel(), is(equalTo(model)));
+    }
+
+    @Test
+    public void shouldReturnValidatedListOfDevices() throws IOException {
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("validateDevicesTest.json");
+
+        deviceService.saveDevices(inputStream);
+        Set<Device> result = deviceService.getDevices();
+
+        assertThat(result.size(), is(1));
+        Device device = (Device) result.toArray()[0];
+        assertThat(device.getBrand(), is(equalTo("Mockia")));
+        assertThat(device.getModel(), is(equalTo("5800")));
+    }
+
+    @Test
+    public void shouldReturnDevicesWithBrandOrModel() throws IOException {
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("brandOrModel.json");
+
+        deviceService.saveDevices(inputStream);
+        Set<Device> result = deviceService.getDevices("Phony", "Universe A1");
+
+        assertThat(result.size(), is(4));
+        //todo check each device
     }
 
     @After
